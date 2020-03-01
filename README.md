@@ -4,7 +4,6 @@ A Challenge on "Predicting lung cancer survival time" for the Multi-scale models
 Questions:
 - Other model than DeepSurv ?
 
-
 ## Linear model
 Done :
 - Scikit-learn Estimator class: ``CoxPhRegression`` in ``Coxph_regression.py``.
