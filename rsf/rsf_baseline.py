@@ -6,7 +6,7 @@ ToDo: choose the right feature and fine tune.
 """
 
 
-import read_data
+import preprocessing
 from sksurv.ensemble import RandomSurvivalForest
 from sklearn.model_selection import cross_validate
 
@@ -15,11 +15,11 @@ Reading data
 """
 
 def load_data(features=None):
-    X_df, y_df, _ = read_data.load_owkin_data()
+    X_df, y_df, _ = preprocessing.load_owkin_data()
     if features != None:
         X_df = X_df[features]
     X = X_df.to_numpy()
-    y = read_data.y_dataframe_to_rsf_input(y_df)
+    y = preprocessing.y_dataframe_to_rsf_input(y_df)
     return X_df, y_df, X, y
 
 X_df, y_df, X, y = load_data()

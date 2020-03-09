@@ -5,7 +5,7 @@ Leon Zheng
 
 from Coxph_regression import CoxPhRegression
 from sklearn.model_selection import GridSearchCV
-import read_data
+import preprocessing
 import numpy as np
 
 """
@@ -20,9 +20,13 @@ features = radiomics_features + clinical_features
 """
 Reading data
 """
-input_train, output_train, input_test = read_data.load_owkin_data()
+# Read clean data
+input_train, output_train, input_test = preprocessing.load_owkin_data()
 input_train = input_train[features]
 input_test = input_test[features]
+
+# Normalization
+input_train, input_test = preprocessing.normalizing_input(input_train, input_test)
 print(input_train)
 print(output_train)
 

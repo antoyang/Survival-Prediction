@@ -20,6 +20,13 @@ def read_input(file_radiomics, file_clinical):
     input = pd.concat([radiomics, clinical], axis=1)
     return input
 
+def normalizing_input(x_train, x_test):
+    all_x = pd.concat([x_train, x_test])
+    x_val = all_x.values
+    min_max_scaler = preprocessing.MinMaxScaler()
+    x_scaled = min_max_scaler.fit_transform(x_val)
+    df = pd.DataFrame(x_scaled, index=all_x.index, columns=all_x.columns)
+    return df.loc[x_train.index], df.loc[x_test.index]
 
 def cleaning_clinical(clinical):
     """
