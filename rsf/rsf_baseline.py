@@ -13,12 +13,9 @@ from sklearn.model_selection import cross_validate
 """
 Reading data
 """
-radiomics_path = 'data/train/features/radiomics.csv'
-clinical_path = 'data/train/features/clinical_data_cleaned.csv'
-label_path = 'data/train/y_train.csv'
 
 def load_data(features=None):
-    X_df, y_df = read_data.load_owkin_data(radiomics_path, clinical_path, label_path, without_nan=True)
+    X_df, y_df, _ = read_data.load_owkin_data()
     if features != None:
         X_df = X_df[features]
     X = X_df.to_numpy()

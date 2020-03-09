@@ -5,6 +5,7 @@ Leon Zheng
 
 import pandas as pd
 import numpy as np
+from sklearn import preprocessing
 
 def read_input(file_radiomics, file_clinical):
     """
@@ -15,9 +16,41 @@ def read_input(file_radiomics, file_clinical):
     """
     radiomics = pd.read_csv(file_radiomics, index_col=0)
     clinical = pd.read_csv(file_clinical, index_col=0)
-    clinical = pd.get_dummies(clinical)
+    clinical = cleaning_clinical(clinical)
     input = pd.concat([radiomics, clinical], axis=1)
     return input
+
+
+def cleaning_clinical(clinical):
+    """
+    Cleaning the clinical dataframe.
+    :param clinical:
+    :return:
+    """
+    # Encoding label for SourceDataset
+    le = preprocessing.LabelEncoder()
+    le.fit(clinical['SourceDataset'])
+    le.transform(clinical['SourceDataset'])
+    clinical['SourceDataset'] = le.transform(clinical['SourceDataset'])
+    # Cleaning Histology
+    clinical.replace("NSCLC NOS (not otherwise specified)", "nos", inplace=True)
+    clinical.replace("Adenocarcinoma", "adenocarcinoma", inplace=True)
+    clinical.replace("Squamous cell carcinoma", "squamous cell carcinoma", inplace=True)
+    # Dummies for Histology
+    clinical = pd.get_dummies(clinical)
+    # Fill age nan
+    clinical['age'].fillna((clinical['age'].mean()), inplace=True)
+
+    return clinical
+
+def read_output(file_output):
+    """
+    Return dataframe for event + survival time.
+    :param file_output:
+    :return:
+    """
+    output = pd.read_csv(file_output, index_col=0, header=0)
+    return output
 
 def clean_clinical_data(file, newfile):
     """
@@ -26,16 +59,9 @@ def clean_clinical_data(file, newfile):
     :param newfile: path for the cleaned data file.
     :return:
     """
-    with open(file) as f:
-        content = f.readlines()
-    for i in range(len(content)):
-        content[i] = content[i].replace("NSCLC NOS (not otherwise specified)", "nos")
-        content[i] = content[i].replace("Adenocarcinoma", "adenocarcinoma")
-        content[i] = content[i].replace("Squamous cell carcinoma", "squamous cell carcinoma")
-    f = open(newfile, "w+")
-    for line in content:
-        f.write(line)
-    f.close()
+    clinical = pd.read_csv(file, index_col=0)
+    cleaned = cleaning_clinical(clinical)
+    cleaned.to_csv(newfile)
 
 def y_dataframe_to_rsf_input(y_df):
     """
@@ -50,41 +76,21 @@ def y_dataframe_to_rsf_input(y_df):
         y_array.append(tuple)
     return np.array(y_array, dtype = [(f'{y_df.columns[1]}', np.bool), (f'{y_df.columns[0]}', np.float)])
 
-def read_output(file_output):
+def load_owkin_data(radiomics_path_train="data/train/features/radiomics.csv",
+                    clinical_path_train="data/train/features/clinical_data.csv",
+                    label_path_train='data/train/y_train.csv',
+                    radiomics_path_test="data/test/features/radiomics.csv",
+                    clinical_path_test="data/test/features/clinical_data.csv"):
     """
-    Return dataframe for event + survival time.
-    :param file_output:
-    :return:
+    Load Owkin data: return PyRadiomics + clinical features of training set in dataframe,
+                    event + time of training set in dataframe, and
+                    PyRadiomics + clinical features of testing set in dataframe,
     """
-    output = pd.read_csv(file_output, index_col=0, header=0)
-    return output
-
-def eliminate_nan(input, output):
-    """
-    Eliminate patient with nan.
-    :param input: features dataframe
-    :param output: event + survival time dataframe.
-    :return:
-    """
-    input_no_nan = input.dropna()
-    output_no_nan = output.loc[input_no_nan.index]
-    return input_no_nan, output_no_nan
-
-def load_owkin_data(radiomics_path, clinical_path, label_path, without_nan=True):
-    """
-    Load Owkin data: radiomics features, clinical features, and
-    :param radiomics_path: filename
-    :param clinical_path: filename
-    :param label_path: filename
-    :param without_nan: set True if reading data without nan
-    :return: input is a pandas dataframe with all radiomics and clinical features.
-            ouput is event + survival time dataframe.
-    """
-    input = read_input(radiomics_path, clinical_path)
-    output = read_output(label_path)
-    if without_nan:
-        return eliminate_nan(input, output)
-    return input, output
+    input_train = read_input(radiomics_path_train, clinical_path_train)
+    output_train = read_output(label_path_train)
+    input_test = read_input(radiomics_path_test, clinical_path_test)
+    return input_train, output_train, input_test
 
 if __name__ == '__main__':
-    clean_clinical_data("data/train/features/clinical_data.csv", "data/train/features/clinical_data_cleaned.csv")
+    input_train, output_train, input_test = load_owkin_data()
+    print(input_train, output_train, input_test)
