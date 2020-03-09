@@ -6,33 +6,35 @@ Leon Zheng
 import pandas as pd
 from Coxph_regression import CoxPhRegression
 from sklearn.model_selection import GridSearchCV
+import read_data
 import numpy as np
 
 """
 Feature selection
 """
-radiomics_features = ['PatientID', 'original_shape_Sphericity', 'original_shape_SurfaceVolumeRatio',
+radiomics_features = ['original_shape_Sphericity', 'original_shape_SurfaceVolumeRatio',
                       'original_shape_Maximum3DDiameter', 'original_glcm_JointEntropy', 'original_glcm_Id',
                       'original_glcm_Idm']
-clinical_features = ['PatientID', 'SourceDataset', 'Nstage']
+clinical_features = ['SourceDataset_l1', 'Nstage']
+features = radiomics_features + clinical_features
 
 """
 Reading data
 """
 # Read training set
-radiomics_train = pd.read_csv("data/train/features/radiomics.csv", index_col=0, usecols = radiomics_features)
-clinical_train = pd.read_csv("data/train/features/clinical_data.csv", index_col=0, usecols = clinical_features)
-clinical_train.SourceDataset = pd.factorize(clinical_train.SourceDataset)[0]
-input_train = pd.concat([radiomics_train, clinical_train], axis=1)
+radiomics_path_train = 'data/train/features/radiomics.csv'
+clinical_path_train = 'data/train/features/clinical_data_cleaned.csv'
+label_path_train = 'data/train/y_train.csv'
+input_train, output_train = read_data.load_owkin_data(radiomics_path_train, clinical_path_train, label_path_train)
+input_train = input_train[features]
 print(input_train)
-output_train = pd.read_csv("data/train/y_train.csv", index_col=0, header=0)
 print(output_train)
 
 # Read testing set
-radiomics_test = pd.read_csv("data/test/features/radiomics.csv", index_col=0, usecols= radiomics_features)
-clinical_test = pd.read_csv("data/test/features/clinical_data.csv", index_col=0, usecols= clinical_features)
-clinical_test.SourceDataset = pd.factorize(clinical_test.SourceDataset)[0]
-input_test = pd.concat([radiomics_test, clinical_test], axis=1)
+radiomics_path_test = 'data/test/features/radiomics.csv'
+clinical_path_test = 'data/test/features/clinical_data_cleaned.csv'
+input_test = read_data.read_input(radiomics_path_test, clinical_path_test)
+input_test = input_test[features]
 
 """ 
 Grid search
@@ -49,6 +51,7 @@ print(best_params)
 Create submission
 """
 # Create submission
+print(input_test)
 coxph = CoxPhRegression(**best_params)
 coxph.fit(input_train, output_train)
 y_pred = coxph.predict(input_test)

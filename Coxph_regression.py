@@ -13,7 +13,7 @@ from metrics import cindex
 
 class CoxPhRegression(BaseEstimator):
 
-    def __init__(self, alpha=10, threshold=0.55):
+    def __init__(self, alpha=1e-8, threshold=0.9):
         self.alpha = alpha
         self.threshold = threshold
         self.model = CoxPHSurvivalAnalysis(alpha=alpha)
