@@ -4,15 +4,17 @@ A Challenge on "Predicting lung cancer survival time" for the Multi-scale models
 ## Computer Vision Pipeline
 Done:
 - Pyradiomics Feature Extraction Reproduction (130 instead of 5X)
-- 3D Scan / Mask Visualization or 2D Slice Visualization
+- 3D Scan / Mask Visualization or 2D Slice Visualization / 3D shape visualization of tumor
 - 2D discriminative slice extraction and preprocessing (to make it compatible with standard pretrained CNNs)
 - CNN (Resnet18) Feature Extraction from either best slice among each dim (3 times 512 feature vector per train / test scan), either the best slice only (512 feature vector per scan)
 - End to End pipeline based on pycox, a debug model, a ConvNet from scratch and a Resnet + MLP model.
 Tried with clean dataloader for data augmentation, but problem with compute baseline hazard then.
+- Attention + CNN with 2D best slice
 - Binary Classifier (with clean data augmentation and dataloader)
 - Grad-CAM of end2end training / binary classifier 
 - 3D Segmentation training, 3D plot, recovering empty masks + feature extraction and corresponding evaluation 
 - LoG and Wavelet visualizations
+- DeepSurv based on traditional features
 Everything is in ScanCNN / Feature_Extraction (pkl not here because too heavy)
 
 ## Linear model
