@@ -11,20 +11,9 @@ Done:
 Tried with clean dataloader for data augmentation, but problem with compute baseline hazard then.
 - Binary Classifier (with clean data augmentation and dataloader)
 - Grad-CAM of end2end training / binary classifier 
+- 3D Segmentation training, 3D plot, recovering empty masks + feature extraction and corresponding evaluation 
+- LoG and Wavelet visualizations
 
-Questions:
-- Impact of having smaller images than usual / using repeat x3 instead of standard RGB on the efficiency of the CNNs ?
-- Possibility of using 3D images ? seems hard, not many images + no pretrained CNNs
-- Performances improvement brought by extracted features without finetuning ? (need PCA + prediction)
-- Performances of the end2end CNN: so so despite all the tuning. Can be improved ?
-
-To Do:
-- Explore Ondelettes 
-- Segmentation Model U-Net like for feature extraction
-- Image multiplied by mask ?
-
-Questions:
-- Other model than DeepSurv ?
 
 ## Linear model
 Done :
