@@ -1,5 +1,5 @@
 # Survival-Prediction
-A Challenge on "Predicting lung cancer survival time" for the Multi-scale models and convolutional neural networks MVA course
+A Challenge on "Predicting lung cancer survival time" for the Multi-scale models and convolutional neural networks MVA course, done with Léon Zheng.
 
 ## Computer Vision Pipeline
 Done:
