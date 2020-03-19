@@ -13,7 +13,7 @@ Tried with clean dataloader for data augmentation, but problem with compute base
 - Grad-CAM of end2end training / binary classifier 
 - 3D Segmentation training, 3D plot, recovering empty masks + feature extraction and corresponding evaluation 
 - LoG and Wavelet visualizations
-
+Everything is in ScanCNN / Feature_Extraction (pkl not here because too heavy)
 
 ## Linear model
 Done :
