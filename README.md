@@ -17,6 +17,9 @@ Tried with clean dataloader for data augmentation, but problem with compute base
 - DeepSurv based on traditional features
 Everything is in ScanCNN / Feature_Extraction (pkl not here because too heavy)
 
+To Try:
+Pretrained 3D model https://github.com/Tencent/MedicalNet
+
 ## Linear model
 Done :
 - Scikit-learn Estimator class: ``CoxPhRegression`` in ``Coxph_regression.py``.
