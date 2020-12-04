@@ -15,7 +15,7 @@ The following functionalities aim to provide solutions to the prediction of surv
 - Visualization of the tumor in various forms: video, 2D slice, 3D shape
 - Simplification to a 2D problem with extraction of the 2D "most discriminative" slice and feature extraction with a pretrained ResNet-18 model
 - Simplification to binary classification between patients that have high risks or low risks
-- End-to-end pipeline with negative log partial likelihood to finetune a ResNet-18 while learning a 3-layer perceptron or an attention-based model predicting the risk of patients on top of it.
+- End-to-end pipeline with negative log partial likelihood to finetune a ResNet-18 while learning a 3-layer perceptron or an attention-based model predicting the risk of patients on top of it
 - Analysis of these approaches with Grad-Cam
 - Binary Image Semantic Segmentation with a 3D U-Net to recover missing masks and for 3D feature extraction
 
